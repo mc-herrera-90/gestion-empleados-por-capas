@@ -1,1 +1,0 @@
-## Instrucciones sobre el proyecto
