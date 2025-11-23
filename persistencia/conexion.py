@@ -2,10 +2,10 @@ import pymysql
 
 class Conexion:
 
-    def __init__(self):
+    def __init__(self, user, password):
         self.host = 'localhost'
-        self.user = 'administrador'
-        self.password = 'admin123'
+        self.user = user
+        self.password = password
         self.database = 'ecotech_solutions_company'
 
     def conectar(self):
@@ -25,5 +25,7 @@ class Conexion:
             return None
 
 if __name__ == '__main__':
-    conexion = Conexion()
+    user = input("Ingrese el usuario de la base de datos: ")
+    password = input("Ingrese la contraseña de la base de datos: ")
+    conexion = Conexion(user, password)
     conexion.conectar()
