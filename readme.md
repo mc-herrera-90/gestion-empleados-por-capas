@@ -20,3 +20,9 @@ python3 -m venv venv
 # macos o Linux
 source venv/bin/activate
 ```
+
+3. Instalar dependencias
+
+```bash
+pip install -r requirements.txt
+```
