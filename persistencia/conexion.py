@@ -1,31 +1,48 @@
 import pymysql
+from pymysql.connections import Connection
+from typing import Optional
 
 class Conexion:
+  """
+  Clase base para gestionar la conexión a MySQL.
 
-    def __init__(self, user, password):
-        self.host = 'localhost'
-        self.user = user
-        self.password = password
-        self.database = 'ecotech_solutions_company'
+  No solicita credenciales por consola (la UI debe hacerlo).
+  La clase solo intenta conectar y devuelve la conexión.
+  """
+  def __init__(self,
+    host: str = "localhost",
+    database: str = "ecotech_solutions_company"
+  ) -> None:
+    self._host = host
+    self._database = database
 
-    def conectar(self):
-        # Aquí iría la lógica para conectar a la base de datos
-        try:
-            conexion = pymysql.connect(
-                host=self.host,
-                user=self.user,
-                password=self.password,
-                database=self.database,
-                auth_plugin_map={'caching_sha2_password': pymysql.cursors.DictCursor}
-            )
-            print("Conexión exitosa a la base de datos")
-            return conexion
-        except pymysql.MySQLError as e:
-            print(f"Error al conectar a la base de datos: {e}")
-            return None
+  def conectar(self, user: str, password: str) -> Optional[Connection]:
+    """
+    Intenta una conexión ÚNICA.
+    La capa aplicación decide si reintenta o no.
+    """
+    try:
+      conn = pymysql.connect(
+        host=self._host,
+        user=user,
+        password=password,
+        database=self._database
+      )
+      return conn
 
-if __name__ == '__main__':
-    user = input("Ingrese el usuario de la base de datos: ")
-    password = input("Ingrese la contraseña de la base de datos: ")
-    conexion = Conexion(user, password)
-    conexion.conectar()
+    except pymysql.MySQLError as e:
+      print(f"Error al conectar: {e}")
+      return None
+
+    def desconectar(self, conexion: Connection) -> bool:
+        """
+        Cierra la conexión abierta.
+        """
+        if conexion:
+            try:
+                conexion.close()
+                return True
+            except pymysql.MySQLError as e:
+                print(f"[Conexion] Error al cerrar conexión: {e}")
+                return False
+        return False
