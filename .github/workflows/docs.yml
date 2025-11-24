@@ -5,9 +5,6 @@ on:
   push:
     branches:
       - main
-    # Alternative: only build for tags.
-    # tags:
-    #   - '*'
 
 # security: restrict permissions for CI jobs.
 permissions:
@@ -21,28 +18,29 @@ jobs:
       - uses: actions/checkout@v5
         with:
           persist-credentials: false
+
       - uses: actions/setup-python@v6
         with:
           python-version: '3.14'
 
-      # ADJUST THIS: install all dependencies (including pdoc)
+      # Install all dependencies (including docs)
       - run: |
-        python -m pip install --upgrade pip setuptools wheel
-        pip install -e .[docs]
+          python -m pip install --upgrade pip setuptools wheel
+          pip install -e .[docs]
 
+      # Generate documentation
       - name: Generar doc Aplicacion
-        run: pdoc -o docs/aplicacion aplicacion
+        run: python -m pdoc -o docs/aplicacion aplicacion
 
       - name: Generar doc Persistencia
-        run: pdoc -o docs/persistencia persistencia
+        run: python -m pdoc -o docs/persistencia persistencia
 
-
+      # Upload the docs as artifact for GitHub Pages
       - uses: actions/upload-pages-artifact@v4
         with:
           path: docs/
 
   # Deploy the artifact to GitHub pages.
-  # This is a separate job so that only actions/deploy-pages has the necessary permissions.
   deploy:
     needs: build
     runs-on: ubuntu-latest
