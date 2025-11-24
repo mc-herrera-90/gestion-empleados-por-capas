@@ -30,7 +30,7 @@ jobs:
       - name: Generate docs for aplicacion
         run: |
           export PYTHONPATH=$(pwd)
-          python -m pdoc -o docs/aplicacion aplicacion
+          pdoc -o docs/aplicacion aplicacion --mermaid
 
       - name: Generate docs for persistencia
         run: |
