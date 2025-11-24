@@ -7,6 +7,8 @@ on:
 
 permissions:
   contents: read
+  pages: write
+  id-token: write
 
 jobs:
   build:
@@ -40,3 +42,4 @@ jobs:
           publish_branch: gh-pages
           user_name: "github-actions"
           user_email: "github-actions@github.com"
+          force_orphan: true
