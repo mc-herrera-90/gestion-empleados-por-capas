@@ -1,4 +1,4 @@
-name: "Docs"
+name: Docs
 
 on:
   push:
@@ -7,42 +7,48 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read    # lectura de tu repositorio
-  pages: write      # escritura para GitHub Pages
-  id-token: write   # requerido para deploy de Pages
+  contents: read  # Lectura de repos
+  pages: write    # Permite publicar en gh-pages
+  id-token: write # Necesario para algunas acciones de deploy
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0  # Necesario para tener historial completo
 
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
-          python-version: "3.14"
+          python-version: '3.14'
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip setuptools wheel
-          pip install -e .[docs]  # si tu proyecto tiene extras docs
+          pip install -e .[docs]  # Ajusta según tus extras
 
-      - name: Set PYTHONPATH
-        run: echo "PYTHONPATH=$(pwd)" >> $GITHUB_ENV
-
-      - name: Generate documentation - Aplicacion
+      - name: Generate Aplicacion docs
         run: python -m pdoc -o docs/aplicacion aplicacion
 
-      - name: Generate documentation - Persistencia
+      - name: Generate Persistencia docs
         run: python -m pdoc -o docs/persistencia persistencia
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GH_PAGES_TOKEN }}  # <- Usa tu PAT aquí
           publish_branch: gh-pages
           publish_dir: ./docs
+          allow_empty_commit: true
