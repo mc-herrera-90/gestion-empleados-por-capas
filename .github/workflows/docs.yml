@@ -6,20 +6,22 @@ on:
       - main
 
 permissions:
-  contents: read    # leer repo
-  pages: write       # necesario para publicar Pages
-  id-token: write    # necesario para deploy automático
+  contents: read   # lectura del repositorio
+  pages: write     # necesario para publicar GH Pages
+  id-token: write  # para deploys con GH Pages Actions
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    steps:
-      # 1️⃣ Clonar el repo
-      - uses: actions/checkout@v5
-        with:
-          persist-credentials: false
 
-      # 2️⃣ Instalar Python y pdoc
+    steps:
+      # 1. Clonar el repositorio
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # 2. Instalar Python y dependencias
       - uses: actions/setup-python@v6
         with:
           python-version: '3.14'
@@ -29,20 +31,20 @@ jobs:
           python -m pip install --upgrade pip setuptools wheel
           pip install -e .[docs]
 
-      # 3️⃣ Generar documentación con pdoc
+      # 3. Generar documentación pdoc
       - name: Generar doc Aplicacion
         run: python -m pdoc -o docs/aplicacion aplicacion
 
       - name: Generar doc Persistencia
         run: python -m pdoc -o docs/persistencia persistencia
 
-      # 4️⃣ Publicar en gh-pages
-      - name: Deploy a gh-pages
-        uses: peaceiris/actions-gh-pages@v5
+      # 4. Deploy a gh-pages usando peaceiris v4
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }} # token automático, no necesitas PAT
-          publish_dir: ./docs
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
+          publish_dir: ./docs
           user_name: "github-actions"
           user_email: "github-actions@github.com"
-          keep_files: true # opcional, mantiene archivos anteriores en gh-pages
+          allow_empty_commit: true
