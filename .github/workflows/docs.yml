@@ -30,10 +30,10 @@ jobs:
 
       # Generate documentation
       - name: Generar doc Aplicacion
-        run: python -m pdoc --force -o docs/aplicacion aplicacion
+        run: python -m pdoc -o docs/aplicacion aplicacion
 
       - name: Generar doc Persistencia
-        run: python -m pdoc --force -o docs/persistencia persistencia
+        run: python -m pdoc -o docs/persistencia persistencia
 
       # Upload docs as artifact for Pages deployment
       - uses: actions/upload-pages-artifact@v4
