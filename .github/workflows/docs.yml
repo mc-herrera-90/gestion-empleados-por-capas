@@ -29,7 +29,12 @@ jobs:
       - run: pip install -e .
       # ADJUST THIS: build your documentation into docs/.
       # We use a custom build script for pdoc itself, ideally you just run `pdoc -o docs/ ...` here.
-      - run: python docs/make.py
+      - name: Generar doc Aplicacion
+        run: pdoc -o docs/aplicacion aplicacion
+
+      - name: Generar doc Persistencia
+        run: pdoc -o docs/persistencia persistencia
+
 
       - uses: actions/upload-pages-artifact@v4
         with:
