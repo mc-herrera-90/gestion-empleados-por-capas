@@ -13,5 +13,9 @@ license = "MIT"
 # Si tu proyecto tiene dependencias, agrégalas aquí:
 dependencies = []
 
+[project.optional-dependencies]
+docs = ["pdoc>=12.0"]
+
+
 [tool.setuptools.packages.find]
 include = ["aplicacion", "persistencia"]
