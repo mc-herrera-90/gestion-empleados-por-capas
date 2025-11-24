@@ -1,9 +1,9 @@
-name: Docs
+name: Build Docs
 
 on:
   push:
     branches:
-      - main
+      - main  # cuando hagas push a main
 
 permissions:
   contents: read
@@ -15,38 +15,31 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      # 1️⃣ Clonar el repo
+      - uses: actions/checkout@v3
 
+      # 2️⃣ Configurar Python
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: 3.14
 
-      - name: Install pdoc
-        run: pip install pdoc
-
-      - name: Build docs aplicacion
+      # 3️⃣ Instalar dependencias desde pyproject.toml
+      - name: Install dependencies
         run: |
-          export PYTHONPATH=$(pwd)
+          python -m pip install --upgrade pip setuptools
+          pip install .[docs]   # esto instalará PyMySQL y pdoc
+
+      # 4️⃣ Generar la documentación
+      - name: Build docs
+        run: |
           python -m pdoc -o docs/aplicacion aplicacion
-
-      - name: Build docs persistencia
-        run: |
-          export PYTHONPATH=$(pwd)
           python -m pdoc -o docs/persistencia persistencia
 
-      - name: Merge docs into single folder
-        run: |
-          mkdir -p docs/_site
-          cp -r docs/aplicacion/* docs/_site/
-          cp -r docs/persistencia/* docs/_site/
-
-      - name: List docs
-        run: ls -R docs/_site
-
+      # 5️⃣ Deploy a gh-pages usando tu PAT
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
-          github_token: ${{ secrets.GH_TOKEN }}
-          publish_dir: ./docs/_site
+          github_token: ${{ secrets.GH_TOKEN }}   # aquí tu PAT
+          publish_dir: ./docs
           publish_branch: gh-pages
