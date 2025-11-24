@@ -1,48 +1,72 @@
-## Instrucciones sobre el proyecto
+# Sistema de Gestión de Empleados EcoTech Solutions
 
-## Configurar el entorno virtual
+Este proyecto implementa un sistema de gestión utilizando Python y MySQL bajo una arquitectura por capas.
 
+El diseño busca mantener una separación clara de responsabilidades, aumentar la mantenibilidad del sistema y facilitar futuras extensiones.
 
-1. Crear un entorno virtual:
+---
+
+## Instrucciones
+
+## 1. Clonar el repositorio
+
+```bash
+git clone https://github.com/mc-herrera-90/gestion-empleados-por-capas.git
+````
+
+---
+
+## 2. Configuración del entorno virtual
+
+### Crear entorno virtual
 
 ```bash
 # Windows
 python -m venv venv
-# macOS o Linux
+
+# macOS / Linux
 python3 -m venv venv
 ```
 
-2. Activar el entorno virtual:
+### Activar el entorno virtual
 
 ```bash
-# En windows
+# Windows
 .\venv\Scripts\activate
-# macos o Linux
+
+# macOS / Linux
 source venv/bin/activate
 ```
 
-3. Instalar dependencias
+### Instalar dependencias
 
 ```bash
 pip install -r requirements.txt
 ```
 
+---
 
-## Generar la documentación
+## 3. Generar documentación
 
-Generar la documentación en una carpeta llamada documentación:
+La documentación se genera mediante **pdoc**:
 
 ```bash
-pdoc module -o documentacion
+pdoc . -o documentacion
 ```
 
-## Estructuras por capas
+Esto creará documentación HTML dentro de la carpeta `documentacion/`.
 
-En una arquitectura por capas, el sistema suele organizarse de la siguiente manera:
+---
+
+## 4. Arquitectura del sistema
+
+El proyecto sigue una arquitectura por capas que permite desacoplar responsabilidades y organizar el código de forma clara:
 
 ```
 Presentación → Aplicación → Dominio → Persistencia
 ```
+
+Cada capa cumple funciones específicas:
 
 | Capa                                  | Rol                                         |
 | ------------------------------------- | ------------------------------------------- |
@@ -52,78 +76,131 @@ Presentación → Aplicación → Dominio → Persistencia
 | **Persistencia** (*DepartamentoDAO*)  | Guarda y recupera datos desde MySQL         |
 
 
+### Capa de Presentación
+
+Encargada de la interacción con el usuario. Contiene los menús, preguntas y salida por pantalla.
+No implementa lógica de negocio ni accede a la base de datos.
+
 ### Capa de Aplicación
 
-La **capa de Aplicación** es la encargada de coordinar la lógica del programa.
-Es decir, **decide qué hacer**, pero no hace el trabajo duro por sí misma.
+Coordina las acciones del sistema.
+Recibe solicitudes de la presentación, crea objetos del dominio, ejecuta validaciones y delega las operaciones a la persistencia.
 
-**La capa de Aplicación actúa como el “cerebro del flujo del programa”**:
-
-* Recibe peticiones desde la interfaz/presentación (menús, vistas, API, etc.)
-* Decide qué clases del dominio deben utilizarse
-* Llama a los DAOs para guardar/leer datos
-* Aplica validaciones básicas
-* Evita que la presentación se conecte directo a la BD
-* Evita que la persistencia se mezcle con la UI
+Su propósito es controlar el flujo general sin involucrarse en detalles técnicos.
 
 > [!NOTE]  
 > Es una capa **intermedia** que mantiene a tu proyecto ordenado, limpio y desacoplado.
 
-Ejemplo de uso:
+### Capa de Dominio
 
-```python
-class ReglasDepartamento:
+Contiene las entidades centrales del sistema (por ejemplo, `Departamento`, `Empleado`, `Proyecto`).
+Modela la estructura y reglas internas del negocio.
 
-	def __init__(self, dao: DepartamentoDAO):
-        self.dao = dao
+### Capa de Persistencia
 
-    def crear_objeto(self, nombre: str, descripcion: str = None) -> bool:
-        d = Departamento(nombre=nombre, descripcion=descripcion)
-        return self.dao.agregar(d)
+Administra el acceso a MySQL mediante DAOs con consultas parametrizadas.
+No conoce nada sobre la interfaz de usuario ni la lógica de control.
 
-    def mostrar_todos(self) -> List[Departamento]:
-        return self.dao.mostrar()
+---
 
-    def buscar(self, valor) -> Optional[Departamento]:
-        return self.dao.buscar(valor)
+## 5. Diagrama
 
-    def modificar(self, depto: Departamento) -> bool:
-        return self.dao.modificar(depto)
+El siguiente diagrama muestra la estructura conceptual del sistema, basada en el modelo solicitado:
 
-    def eliminar(self, depto: Departamento) -> bool:
-        return self.dao.eliminar(depto)
+```mermaid
+classDiagram
+    class Departamento {
+        -id: int
+        -nombre: str
+        -descripcion: str
+    }
+
+    class Empleado {
+        -id: int
+        -nombre: str
+        -apellido: str
+        -departamento_id: int
+    }
+
+    class Proyecto {
+        -id: int
+        -nombre: str
+        -departamento_id: int
+    }
+
+    class DepartamentoDAO {
+        +agregar(d: Departamento) bool
+        +mostrar() list
+        +buscar(valor) Departamento
+        +modificar(d: Departamento) bool
+        +eliminar(d: Departamento) bool
+    }
+
+    class EmpleadoDAO {
+        +agregar(e: Empleado) bool
+        +mostrar() list
+        +buscar(valor) Empleado
+        +modificar(e: Empleado) bool
+        +eliminar(e: Empleado) bool
+    }
+
+    class ProyectoDAO {
+        +agregar(p: Proyecto) bool
+        +mostrar() list
+        +buscar(valor) Proyecto
+        +modificar(p: Proyecto) bool
+        +eliminar(p: Proyecto) bool
+    }
+
+    class ReglasDepartamento
+    class ReglasEmpleado
+    class ReglasProyecto
+
+    DepartamentoDAO --> Departamento
+    EmpleadoDAO --> Empleado
+    ProyectoDAO --> Proyecto
+
+    ReglasDepartamento --> DepartamentoDAO
+    ReglasEmpleado --> EmpleadoDAO
+    ReglasProyecto --> ProyectoDAO
 ```
 
-De este modo cada capa realiza la acción que le corresponde.
+---
 
-1. La presentación SOLO llama a métodos como:
+## 6. Estructura del proyecto
 
-```python
-reglas.crear_objeto()
+```
+proyecto/
+│── aplicacion/
+│── dominio/
+│── persistencia/
+│── presentacion/
+│── documentacion/
+│── requirements.txt
+│── main.py
+│── readme.md
 ```
 
-2. La capa de aplicación:
-	* Crea un objeto `Departamento`
-	* Llama al DAO para guardarlo
-	* Devuelve True/False
+Cada carpeta corresponde a una capa independiente del sistema.
 
+---
 
-3. La UI nunca toca la BD:
-	* Se impide que la interfaz toque la BD directamente
-	* Sin esta capa, tu menú tendría que hacer algo así:
+## 7. Ejecución del programa
 
-```python
-# ERROR: la UI no debería llamar directamente al DAO
-dao = DepartamentoDAO()
-dao.agregar(Departamento(...))
+```bash
+python main.py
 ```
 
-Eso mezcla presentación + persistencia.
-La arquitectura quedaría mala y difícil de mantener.
+---
 
+## 8. Consideraciones finales
 
-4. Escalabilidad y mantenimiento:
-	* Permite cambiar la BD sin tocar la interfaz. Si mañana cambias:
-		* MySQL → PostgreSQL
-		* PyMySQL → SQLAlchemy
-		* Archivo plano → Firebase
+La arquitectura adoptada proporciona:
+
+* Código más organizado y fácil de mantener
+* Separación estricta entre lógica, representación y acceso a datos
+* Menor acoplamiento entre componentes
+* Mayor facilidad para extender o modificar partes del sistema
+* Mejor soporte para pruebas unitarias
+
+Esta estructura permite que el sistema pueda crecer sin comprometer la claridad ni la estabilidad del proyecto.
