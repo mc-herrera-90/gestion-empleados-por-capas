@@ -1,46 +1,45 @@
 name: website
 
-# build the documentation whenever there are new commits on main
 on:
   push:
     branches:
       - main
 
-# security: restrict permissions for CI jobs.
 permissions:
   contents: read
 
 jobs:
-  # Build the documentation and upload the static HTML files as an artifact.
   build:
     runs-on: ubuntu-latest
     steps:
+      # Checkout repository
       - uses: actions/checkout@v5
         with:
           persist-credentials: false
 
+      # Setup Python
       - uses: actions/setup-python@v6
         with:
           python-version: '3.14'
 
-      # Install all dependencies (including docs)
-      - run: |
+      # Install dependencies including docs extras
+      - name: Install dependencies
+        run: |
           python -m pip install --upgrade pip setuptools wheel
           pip install -e .[docs]
 
       # Generate documentation
       - name: Generar doc Aplicacion
-        run: python -m pdoc -o docs/aplicacion aplicacion
+        run: python -m pdoc --force -o docs/aplicacion aplicacion
 
       - name: Generar doc Persistencia
-        run: python -m pdoc -o docs/persistencia persistencia
+        run: python -m pdoc --force -o docs/persistencia persistencia
 
-      # Upload the docs as artifact for GitHub Pages
+      # Upload docs as artifact for Pages deployment
       - uses: actions/upload-pages-artifact@v4
         with:
           path: docs/
 
-  # Deploy the artifact to GitHub pages.
   deploy:
     needs: build
     runs-on: ubuntu-latest
