@@ -12,42 +12,30 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # Checkout repository
       - uses: actions/checkout@v5
         with:
           persist-credentials: false
 
-      # Setup Python
       - uses: actions/setup-python@v6
         with:
           python-version: '3.14'
 
-      # Install dependencies including docs extras
-      - name: Install dependencies
-        run: |
+      - run: |
           python -m pip install --upgrade pip setuptools wheel
           pip install -e .[docs]
 
-      # Generate documentation
       - name: Generar doc Aplicacion
         run: python -m pdoc -o docs/aplicacion aplicacion
 
       - name: Generar doc Persistencia
         run: python -m pdoc -o docs/persistencia persistencia
 
-      # Upload docs as artifact for Pages deployment
-      - uses: actions/upload-pages-artifact@v4
+      # Deploy a gh-pages manual
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v7
         with:
-          path: docs/
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+          publish_branch: gh-pages
+          user_name: "github-actions"
+          user_email: "github-actions@github.com"
