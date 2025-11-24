@@ -5,6 +5,11 @@ USE ecotech_solutions_company;
 
 -- CREATE USER 'administrador'@'localhost' IDENTIFIED BY 'admin123';
 -- GRANT ALL PRIVILEGES ON ecotech_solutions_company.* TO 'administrador'@`localhost`;
+-- SELECT user, plugin FROM mysql.user;
+-- En caso de que el plugin de autenticación sea sha256_password
+-- ALTER USER 'usuario_sha256'@'localhost' IDENTIFIED WITH mysql_native_password BY 'admin123';
+-- FLUSH PRIVILEGES;
+
 -- Requisitos del servidor: MySQL 8+, InnoDB, utf8mb4
 
 -- -------------------------------------------------------
