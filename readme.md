@@ -81,6 +81,49 @@ Cada capa cumple funciones específicas:
 Encargada de la interacción con el usuario. Contiene los menús, preguntas y salida por pantalla.
 No implementa lógica de negocio ni accede a la base de datos.
 
+
+```mermaid
+classDiagram
+    class Menu {
+        -titulo: str
+        -opciones: str[2..*]
+        +agregar(): None
+        +mostrarTodos(): None
+        +buscarPorCodigo(): None
+        +buscarPorNombre(): None
+        +modificar(): None
+        +eliminar(): None
+        +volverMenuPrincipal(): None
+    }
+
+    class MenuDepartamento {
+        +agregar(): None
+        +mostrarTodos(): None
+        +buscarPorCodigo(): None
+        +buscarPorNombre(): None
+        +modificar(): None
+        +eliminar(): None
+    }
+
+    class MenuEmpleado {
+        +agregar(): None
+        +mostrarTodos(): None
+        +buscarPorCodigo(): None
+        +buscarPorNombre(): None
+        +modificar(): None
+        +eliminar(): None
+    }
+
+    class MenuProyecto {
+        +agregar(): None
+        +mostrarTodos(): None
+        +buscarPorCodigo(): None
+        +buscarPorNombre(): None
+        +modificar(): None
+        +eliminar(): None
+    }
+```
+
 ### Capa de Aplicación
 
 Coordina las acciones del sistema.
@@ -90,22 +133,6 @@ Su propósito es controlar el flujo general sin involucrarse en detalles técnic
 
 > [!NOTE]  
 > Es una capa **intermedia** que mantiene a tu proyecto ordenado, limpio y desacoplado.
-
-### Capa de Dominio
-
-Contiene las entidades centrales del sistema (por ejemplo, `Departamento`, `Empleado`, `Proyecto`).
-Modela la estructura y reglas internas del negocio.
-
-### Capa de Persistencia
-
-Administra el acceso a MySQL mediante DAOs con consultas parametrizadas.
-No conoce nada sobre la interfaz de usuario ni la lógica de control.
-
----
-
-## 5. Diagrama
-
-El siguiente diagrama muestra la estructura conceptual del sistema, basada en el modelo solicitado:
 
 ```mermaid
 classDiagram
@@ -165,9 +192,21 @@ classDiagram
     ReglasProyecto --> ProyectoDAO
 ```
 
+
+### Capa de Dominio
+
+Contiene las entidades centrales del sistema (por ejemplo, `Departamento`, `Empleado`, `Proyecto`).
+Modela la estructura y reglas internas del negocio.
+
+### Capa de Persistencia
+
+Administra el acceso a MySQL mediante DAOs con consultas parametrizadas.
+No conoce nada sobre la interfaz de usuario ni la lógica de control.
+
+
 ---
 
-## 6. Estructura del proyecto
+## 5. Estructura del proyecto
 
 ```
 proyecto/
@@ -185,7 +224,7 @@ Cada carpeta corresponde a una capa independiente del sistema.
 
 ---
 
-## 7. Ejecución del programa
+## 6. Ejecución del programa
 
 ```bash
 python main.py
@@ -193,7 +232,7 @@ python main.py
 
 ---
 
-## 8. Consideraciones finales
+## 7. Consideraciones finales
 
 La arquitectura adoptada proporciona:
 
