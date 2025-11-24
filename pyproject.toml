@@ -12,3 +12,6 @@ license = "MIT"
 
 # Si tu proyecto tiene dependencias, agrégalas aquí:
 dependencies = []
+
+[tool.setuptools.packages.find]
+include = ["aplicacion", "persistencia"]
