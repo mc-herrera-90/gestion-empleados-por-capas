@@ -85,14 +85,18 @@ No implementa lógica de negocio ni accede a la base de datos.
 ```mermaid
 classDiagram
     class Menu {
-        -titulo: str
-        -opciones: str[2..*]
-        +agregar(): None
-        +mostrarTodos(): None
-        +buscarPorCodigo(): None
-        +buscarPorNombre(): None
-        +modificar(): None
-        +eliminar(): None
+        <<abstract>>
+        #titulo: str
+        #opciones: str[2..*]
+
+        <<abstract>> +agregar(): None
+        <<abstract>> +mostrarTodos(): None
+        <<abstract>> +buscarPorCodigo(): None
+        <<abstract>> +buscarPorNombre(): None
+        <<abstract>> +modificar(): None
+        <<abstract>> +eliminar(): None
+
+        +mostrarMenu(): None
         +volverMenuPrincipal(): None
     }
 
@@ -122,6 +126,10 @@ classDiagram
         +modificar(): None
         +eliminar(): None
     }
+
+    Menu <|-- MenuDepartamento
+    Menu <|-- MenuEmpleado
+    Menu <|-- MenuProyecto
 ```
 
 ### Capa de Aplicación
