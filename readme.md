@@ -86,46 +86,18 @@ No implementa lógica de negocio ni accede a la base de datos.
 classDiagram
     class Menu {
         <<abstract>>
-        #titulo: str
-        #opciones: str[2..*]
-
-        <<abstract>> +agregar(): None
-        <<abstract>> +mostrarTodos(): None
-        <<abstract>> +buscarPorCodigo(): None
-        <<abstract>> +buscarPorNombre(): None
-        <<abstract>> +modificar(): None
-        <<abstract>> +eliminar(): None
-
-        +mostrarMenu(): None
-        +volverMenuPrincipal(): None
+        mostrar_menu() void
+        opcion_agregar() void
+        opcion_mostrar() void
+        opcion_buscar_codigo() void
+        opcion_buscar_nombre() void
+        opcion_modificar() void
+        opcion_eliminar() void
     }
 
-    class MenuDepartamento {
-        +agregar(): None
-        +mostrarTodos(): None
-        +buscarPorCodigo(): None
-        +buscarPorNombre(): None
-        +modificar(): None
-        +eliminar(): None
-    }
-
-    class MenuEmpleado {
-        +agregar(): None
-        +mostrarTodos(): None
-        +buscarPorCodigo(): None
-        +buscarPorNombre(): None
-        +modificar(): None
-        +eliminar(): None
-    }
-
-    class MenuProyecto {
-        +agregar(): None
-        +mostrarTodos(): None
-        +buscarPorCodigo(): None
-        +buscarPorNombre(): None
-        +modificar(): None
-        +eliminar(): None
-    }
+    class MenuDepartamento
+    class MenuEmpleado
+    class MenuProyecto
 
     Menu <|-- MenuDepartamento
     Menu <|-- MenuEmpleado
@@ -141,6 +113,39 @@ Su propósito es controlar el flujo general sin involucrarse en detalles técnic
 
 > [!NOTE]  
 > Es una capa **intermedia** que mantiene a tu proyecto ordenado, limpio y desacoplado.
+
+```mermaid
+classDiagram
+    class ReglasDepartamento {
+        +crear_objeto(nombre: str, descripcion: str) bool
+        +mostrar_todos() list
+        +buscar(valor) Departamento
+        +modificar(d: Departamento) bool
+        +eliminar(d: Departamento) bool
+    }
+
+    class ReglasEmpleado {
+        +crear_objeto(nombre: str, apellido: str, departamento_id: int) bool
+        +mostrar_todos() list
+        +buscar(valor) Empleado
+        +modificar(e: Empleado) bool
+        +eliminar(e: Empleado) bool
+    }
+
+    class ReglasProyecto {
+        +crear_objeto(nombre: str, departamento_id: int) bool
+        +mostrar_todos() list
+        +buscar(valor) Proyecto
+        +modificar(p: Proyecto) bool
+        +eliminar(p: Proyecto) bool
+    }
+```
+
+
+### Capa de Dominio
+
+Contiene las entidades centrales del sistema (por ejemplo, `Departamento`, `Empleado`, `Proyecto`).
+Modela la estructura y reglas internas del negocio.
 
 ```mermaid
 classDiagram
@@ -162,7 +167,15 @@ classDiagram
         -nombre: str
         -departamento_id: int
     }
+```
 
+### Capa de Persistencia
+
+Administra el acceso a MySQL mediante DAOs con consultas parametrizadas.
+No conoce nada sobre la interfaz de usuario ni la lógica de control.
+
+```mermaid
+classDiagram
     class DepartamentoDAO {
         +agregar(d: Departamento) bool
         +mostrar() list
@@ -187,30 +200,19 @@ classDiagram
         +eliminar(p: Proyecto) bool
     }
 
-    class ReglasDepartamento
-    class ReglasEmpleado
-    class ReglasProyecto
+    class Conexion {
+        +conectar(user: str, password: str)
+        +desconectar(conn)
+    }
+
+    Conexion <|-- DepartamentoDAO
+    Conexion <|-- EmpleadoDAO
+    Conexion <|-- ProyectoDAO
 
     DepartamentoDAO --> Departamento
     EmpleadoDAO --> Empleado
     ProyectoDAO --> Proyecto
-
-    ReglasDepartamento --> DepartamentoDAO
-    ReglasEmpleado --> EmpleadoDAO
-    ReglasProyecto --> ProyectoDAO
 ```
-
-
-### Capa de Dominio
-
-Contiene las entidades centrales del sistema (por ejemplo, `Departamento`, `Empleado`, `Proyecto`).
-Modela la estructura y reglas internas del negocio.
-
-### Capa de Persistencia
-
-Administra el acceso a MySQL mediante DAOs con consultas parametrizadas.
-No conoce nada sobre la interfaz de usuario ni la lógica de control.
-
 
 ---
 
