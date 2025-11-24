@@ -41,26 +41,6 @@ class GestorBD(Conexion):
       print(f"Error: al leer el archivo SQL {e}")
 
 
-    #     try:
-    #         with con.cursor() as cursor:
-    #             for statement in sql_script.split(";"):
-    #                 stmt = statement.strip()
-    #                 if stmt:
-    #                     cursor.execute(stmt + ";")
-    #         print("🎉 Esquema de la base de datos creado exitosamente.")
-    #         return True
-
-    #     except pymysql.MySQLError as e:
-    #         print(f"❌ Error al ejecutar el script SQL: {e}")
-    #         return False
-
-    # except FileNotFoundError:
-    #     print(f"❌ No se encontró el archivo: {self.archivo_esquema}")
-    #     return False
-    # except IOError as e:
-    #     print(f"❌ Error al leer el archivo SQL: {e}")
-    #     return False
-
 if __name__ == '__main__':
   gdb = GestorBD('schema.sql')
   gdb.crear_esquema()
