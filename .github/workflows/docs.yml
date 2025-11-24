@@ -29,8 +29,6 @@ jobs:
       - run: |
         python -m pip install --upgrade pip setuptools wheel
         pip install -e .[docs]
-      # ADJUST THIS: build your documentation into docs/.
-      # We use a custom build script for pdoc itself, ideally you just run `pdoc -o docs/ ...` here.
 
       - name: Generar doc Aplicacion
         run: pdoc -o docs/aplicacion aplicacion
