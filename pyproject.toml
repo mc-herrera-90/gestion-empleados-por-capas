@@ -11,7 +11,9 @@ requires-python = ">=3.10"
 license = "MIT"
 
 # Si tu proyecto tiene dependencias, agrégalas aquí:
-dependencies = []
+dependencies = [
+	"PyMySQL==1.1.2"
+]
 
 [project.optional-dependencies]
 docs = ["pdoc>=12.0"]
