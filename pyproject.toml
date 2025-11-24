@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gestion-empleados-por-capas"  # nombre de tu proyecto
+version = "0.1.0"
+description = "Sistema de gestión de empleados con arquitectura por capas."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+
+# Si tu proyecto tiene dependencias, agrégalas aquí:
+dependencies = []
