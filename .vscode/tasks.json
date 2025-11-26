@@ -1,0 +1,18 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "setup venv (Linux/Mac)",
+        "type": "shell",
+        "command": "./tools/setup_venv.sh",
+        "problemMatcher": []
+      },
+      {
+        "label": "setup venv (Windows)",
+        "type": "shell",
+        "command": "powershell.exe -ExecutionPolicy Bypass -File ./tools/setup_venv.ps1",
+        "problemMatcher": []
+      }
+    ]
+  }
+  
