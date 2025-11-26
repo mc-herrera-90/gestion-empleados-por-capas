@@ -1,6 +1,7 @@
 
 {
     "recommendations": [
-        "PKief.material-icon-theme"
+        "PKief.material-icon-theme",
+        "ms-python.python"
     ]
 }
