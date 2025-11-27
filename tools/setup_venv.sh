@@ -19,6 +19,5 @@ if [ -f "requirements.txt" ]; then
     ./venv/bin/pip install -r requirements.txt
 fi
 
-echo "🚀 Activando entorno virtual..."
-echo "Para activar manualmente, ejecuta:"
+echo "Para activar el entorno virtual, ejecuta:"
 echo "source venv/bin/activate"
