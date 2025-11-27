@@ -4,7 +4,7 @@
       {
         "label": "setup venv (Linux/Mac)",
         "type": "shell",
-        "command": "./tools/setup_venv.sh",
+        "command": "chmod +x ./tools/setup_venv.sh && ./tools/setup_venv.sh",
         "problemMatcher": []
       },
       {
