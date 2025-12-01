@@ -3,14 +3,24 @@ DROP DATABASE IF EXISTS ecotech_solutions_company;
 CREATE DATABASE ecotech_solutions_company;
 USE ecotech_solutions_company;
 
--- CREATE USER 'administrador'@'localhost' IDENTIFIED BY 'admin123';
--- GRANT ALL PRIVILEGES ON ecotech_solutions_company.* TO 'administrador'@`localhost`;
+CREATE USER IF NOT EXISTS 'administrador'@'localhost' IDENTIFIED BY 'admin123';
+GRANT ALL PRIVILEGES ON ecotech_solutions_company.* TO 'administrador'@`localhost`;
 -- SELECT user, plugin FROM mysql.user;
 -- En caso de que el plugin de autenticación sea sha256_password
 -- ALTER USER 'usuario_sha256'@'localhost' IDENTIFIED WITH mysql_native_password BY 'admin123';
 -- FLUSH PRIVILEGES;
 
 -- Requisitos del servidor: MySQL 8+, InnoDB, utf8mb4
+
+-- -------------------------------------------------------
+-- Tabla: usuarios
+-- -------------------------------------------------------
+CREATE TABLE usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
 -- -------------------------------------------------------
 -- Tabla: departamento
