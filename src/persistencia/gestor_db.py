@@ -1,6 +1,6 @@
 from persistencia.conexion import Conexion
 import pymysql
-from config.variables import BASE_PATH, DB_ROOT, DB_ROOT_PASSWORD
+from configuracion.entorno import ROOT_PATH, DB_ROOT, DB_ROOT_NAME
 import os
 
 class GestorBD(Conexion):
@@ -9,15 +9,15 @@ class GestorBD(Conexion):
   """
 
   def __init__(self,archivo_esquema: str):
-    super().__init__(database='mysql')
-    self.archivo_esquema = os.path.join(BASE_PATH,'sql', archivo_esquema)
+    super().__init__(database=DB_ROOT_NAME)
+    self.archivo_esquema = os.path.join(ROOT_PATH,'sql', archivo_esquema)
 
   def crear_esquema(self):
     try:
       with open(self.archivo_esquema, 'r', encoding='utf-8') as f:
         sql_script = f.read()
       # Aquí necesitamos que la conexión sea con el usuario root
-      con = self.conectar(DB_ROOT, DB_ROOT_PASSWORD)
+      con = self.conectar(DB_ROOT, ROOT_PATH)
       if con is None:
         return False
 
