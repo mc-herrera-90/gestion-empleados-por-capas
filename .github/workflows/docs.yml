@@ -10,17 +10,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Clona tu repo
+      # 1. Clonamos el repo
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2. Configura Python
+      # 2. Configuramos Python
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: 3.14
 
-      # 3. Instala dependencias
+      # 3. Instalamos las dependencias
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -29,13 +29,13 @@ jobs:
       # 4. Genera documentación con pdoc
       - name: Generate docs for aplicacion
         run: |
-          export PYTHONPATH=$(pwd)
-          pdoc -o docs/aplicacion aplicacion --mermaid
+          export PYTHONPATH=$(pwd)/src
+          pdoc -o docs/aplicacion src/aplicacion --mermaid
 
       - name: Generate docs for persistencia
         run: |
-          export PYTHONPATH=$(pwd)
-          python -m pdoc -o docs/persistencia persistencia
+          export PYTHONPATH=$(pwd)/src
+          python -m pdoc -o docs/persistencia src/persistencia
 
       # 5. Publica en gh-pages usando tu PAT
       - name: Deploy to GitHub Pages
