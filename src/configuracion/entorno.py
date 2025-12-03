@@ -21,7 +21,7 @@ import os
 ROOT_PATH = Path(__file__).resolve().parent.parent
 
 # Cargar .env
-load_dotenv(ROOT_PATH / ".env")
+load_dotenv()
 
 # Base de datos
 DB_HOST: str = os.getenv("DB_HOST", "localhost")
