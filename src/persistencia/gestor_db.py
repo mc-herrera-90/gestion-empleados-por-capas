@@ -17,7 +17,7 @@ class GestorBD(Conexion):
       with open(self.archivo_esquema, 'r', encoding='utf-8') as f:
         sql_script = f.read()
       # Aquí necesitamos que la conexión sea con el usuario root
-      con = self.conectar(DB_ROOT, ROOT_PATH)
+      con = self.conectar(DB_ROOT, DB_ROOT_NAME)
       if con is None:
         return False
 
