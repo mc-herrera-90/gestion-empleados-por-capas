@@ -17,6 +17,7 @@ class Conexion:
     ) -> None:
         self._host = host
         self._database = database
+
     def conectar(self, user: str, password: str) -> Optional[Connection]:
         """
         Intenta una conexión ÚNICA.
