@@ -3,16 +3,17 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "gestion-empleados-por-capas"  # nombre de tu proyecto
+name = "gestion-empleados-por-capas"
 version = "0.1.0"
 description = "Sistema de gestión de empleados con arquitectura por capas."
 readme = "readme.md"
 requires-python = ">=3.10"
 license = "MIT"
 
-# Si tu proyecto tiene dependencias, agrégalas aquí:
+# Dependencias del proyecto:
 dependencies = [
-	"PyMySQL==1.1.2"
+	"PyMySQL==1.1.2",
+	"requests==2.32.5"
 ]
 
 [project.optional-dependencies]
