@@ -68,7 +68,7 @@
 
                         <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">persistencia.conexion</span><span class="w"> </span><span class="kn">import</span> <span class="n">Conexion</span>
 </span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">pymysql</span>
-</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">config.variables</span><span class="w"> </span><span class="kn">import</span> <span class="n">BASE_PATH</span>
+</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">configuracion.entorno</span><span class="w"> </span><span class="kn">import</span> <span class="n">ROOT_PATH</span><span class="p">,</span> <span class="n">DB_ROOT</span><span class="p">,</span> <span class="n">DB_ROOT_NAME</span>
 </span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 </span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a>
 </span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="k">class</span><span class="w"> </span><span class="nc">GestorBD</span><span class="p">(</span><span class="n">Conexion</span><span class="p">):</span>
@@ -77,15 +77,15 @@
 </span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="sd">  &quot;&quot;&quot;</span>
 </span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>
 </span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">archivo_esquema</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>    <span class="bp">self</span><span class="o">.</span><span class="n">archivo_esquema</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_PATH</span><span class="p">,</span><span class="s1">&#39;sql&#39;</span><span class="p">,</span> <span class="n">archivo_esquema</span><span class="p">)</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">DB_ROOT_NAME</span><span class="p">)</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>    <span class="bp">self</span><span class="o">.</span><span class="n">archivo_esquema</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span><span class="s1">&#39;sql&#39;</span><span class="p">,</span> <span class="n">archivo_esquema</span><span class="p">)</span>
 </span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>
 </span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>  <span class="k">def</span><span class="w"> </span><span class="nf">crear_esquema</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="k">try</span><span class="p">:</span>
 </span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>      <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">archivo_esquema</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
 </span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>        <span class="n">sql_script</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>      <span class="n">con</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conectar</span><span class="p">(</span><span class="s1">&#39;administrador&#39;</span><span class="p">,</span> <span class="s1">&#39;admin123&#39;</span><span class="p">)</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>      <span class="c1"># Aquí necesitamos que la conexión sea con el usuario root</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>      <span class="n">con</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conectar</span><span class="p">(</span><span class="n">DB_ROOT</span><span class="p">,</span> <span class="n">DB_ROOT_NAME</span><span class="p">)</span>
 </span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>      <span class="k">if</span> <span class="n">con</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>        <span class="k">return</span> <span class="kc">False</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>
@@ -133,15 +133,15 @@
 </span><span id="GestorBD-10"><a href="#GestorBD-10"><span class="linenos">10</span></a><span class="sd">  &quot;&quot;&quot;</span>
 </span><span id="GestorBD-11"><a href="#GestorBD-11"><span class="linenos">11</span></a>
 </span><span id="GestorBD-12"><a href="#GestorBD-12"><span class="linenos">12</span></a>  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">archivo_esquema</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-</span><span id="GestorBD-13"><a href="#GestorBD-13"><span class="linenos">13</span></a>    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-</span><span id="GestorBD-14"><a href="#GestorBD-14"><span class="linenos">14</span></a>    <span class="bp">self</span><span class="o">.</span><span class="n">archivo_esquema</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_PATH</span><span class="p">,</span><span class="s1">&#39;sql&#39;</span><span class="p">,</span> <span class="n">archivo_esquema</span><span class="p">)</span>
+</span><span id="GestorBD-13"><a href="#GestorBD-13"><span class="linenos">13</span></a>    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">DB_ROOT_NAME</span><span class="p">)</span>
+</span><span id="GestorBD-14"><a href="#GestorBD-14"><span class="linenos">14</span></a>    <span class="bp">self</span><span class="o">.</span><span class="n">archivo_esquema</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span><span class="s1">&#39;sql&#39;</span><span class="p">,</span> <span class="n">archivo_esquema</span><span class="p">)</span>
 </span><span id="GestorBD-15"><a href="#GestorBD-15"><span class="linenos">15</span></a>
 </span><span id="GestorBD-16"><a href="#GestorBD-16"><span class="linenos">16</span></a>  <span class="k">def</span><span class="w"> </span><span class="nf">crear_esquema</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="GestorBD-17"><a href="#GestorBD-17"><span class="linenos">17</span></a>    <span class="k">try</span><span class="p">:</span>
 </span><span id="GestorBD-18"><a href="#GestorBD-18"><span class="linenos">18</span></a>      <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">archivo_esquema</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
 </span><span id="GestorBD-19"><a href="#GestorBD-19"><span class="linenos">19</span></a>        <span class="n">sql_script</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-</span><span id="GestorBD-20"><a href="#GestorBD-20"><span class="linenos">20</span></a>
-</span><span id="GestorBD-21"><a href="#GestorBD-21"><span class="linenos">21</span></a>      <span class="n">con</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conectar</span><span class="p">(</span><span class="s1">&#39;administrador&#39;</span><span class="p">,</span> <span class="s1">&#39;admin123&#39;</span><span class="p">)</span>
+</span><span id="GestorBD-20"><a href="#GestorBD-20"><span class="linenos">20</span></a>      <span class="c1"># Aquí necesitamos que la conexión sea con el usuario root</span>
+</span><span id="GestorBD-21"><a href="#GestorBD-21"><span class="linenos">21</span></a>      <span class="n">con</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conectar</span><span class="p">(</span><span class="n">DB_ROOT</span><span class="p">,</span> <span class="n">DB_ROOT_NAME</span><span class="p">)</span>
 </span><span id="GestorBD-22"><a href="#GestorBD-22"><span class="linenos">22</span></a>      <span class="k">if</span> <span class="n">con</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="GestorBD-23"><a href="#GestorBD-23"><span class="linenos">23</span></a>        <span class="k">return</span> <span class="kc">False</span>
 </span><span id="GestorBD-24"><a href="#GestorBD-24"><span class="linenos">24</span></a>
@@ -166,62 +166,7 @@
 </span></pre></div>
 
 
-            <div class="docstring"><h1 id="gestorbd">GestorBD</h1>
-
-<p><code><a href="#GestorBD">GestorBD</a></code> extiende la funcionalidad de la clase <code>Conexion</code> y proporciona métodos para administrar la estructura de la base de datos.</p>
-
-<p>Esta clase está diseñada para ejecutar archivos SQL completos, como scripts de creación de tablas (esquemas), inserciones iniciales y otros comandos necesarios para preparar la base de datos.</p>
-
-<hr />
-
-<h2 id="funciones-principales">Funciones principales</h2>
-
-<h3 id="crear_esquema"><code><a href="#GestorBD.crear_esquema">crear_esquema()</a></code></h3>
-
-<p>Lee un archivo <code>.sql</code> y ejecuta todo el contenido sobre la base de datos conectada, permitiendo crear o reconstruir la estructura completa.</p>
-
-<hr />
-
-<h2 id="parametros-del-constructor">Parámetros del constructor</h2>
-
-<table>
-<thead>
-<tr>
-  <th style="text-align:left;">Parámetro</th>
-  <th style="text-align:left;">Tipo</th>
-  <th style="text-align:left;">Descripción</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-  <td style="text-align:left;"><code>host</code></td>
-  <td style="text-align:left;"><code>str</code></td>
-  <td style="text-align:left;">Dirección del servidor MySQL.</td>
-</tr>
-<tr>
-  <td style="text-align:left;"><code>database</code></td>
-  <td style="text-align:left;"><code>str</code></td>
-  <td style="text-align:left;">Nombre de la base de datos.</td>
-</tr>
-<tr>
-  <td style="text-align:left;"><code>user</code></td>
-  <td style="text-align:left;"><code>str</code></td>
-  <td style="text-align:left;">Usuario autorizado para conectar al servidor.</td>
-</tr>
-<tr>
-  <td style="text-align:left;"><code>password</code></td>
-  <td style="text-align:left;"><code>str</code></td>
-  <td style="text-align:left;">Contraseña correspondiente al usuario.</td>
-</tr>
-<tr>
-  <td style="text-align:left;"><code><a href="#GestorBD.archivo_esquema">archivo_esquema</a></code></td>
-  <td style="text-align:left;"><code>str</code></td>
-  <td style="text-align:left;">Ruta al archivo <code>.sql</code> que contiene las instrucciones del esquema.</td>
-</tr>
-</tbody>
-</table>
-
-<hr />
+            <div class="docstring"><p></p>
 </div>
 
 
@@ -236,8 +181,8 @@
     </div>
     <a class="headerlink" href="#GestorBD.__init__"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="GestorBD.__init__-12"><a href="#GestorBD.__init__-12"><span class="linenos">12</span></a>  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">archivo_esquema</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-</span><span id="GestorBD.__init__-13"><a href="#GestorBD.__init__-13"><span class="linenos">13</span></a>    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-</span><span id="GestorBD.__init__-14"><a href="#GestorBD.__init__-14"><span class="linenos">14</span></a>    <span class="bp">self</span><span class="o">.</span><span class="n">archivo_esquema</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_PATH</span><span class="p">,</span><span class="s1">&#39;sql&#39;</span><span class="p">,</span> <span class="n">archivo_esquema</span><span class="p">)</span>
+</span><span id="GestorBD.__init__-13"><a href="#GestorBD.__init__-13"><span class="linenos">13</span></a>    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">DB_ROOT_NAME</span><span class="p">)</span>
+</span><span id="GestorBD.__init__-14"><a href="#GestorBD.__init__-14"><span class="linenos">14</span></a>    <span class="bp">self</span><span class="o">.</span><span class="n">archivo_esquema</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_PATH</span><span class="p">,</span><span class="s1">&#39;sql&#39;</span><span class="p">,</span> <span class="n">archivo_esquema</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -270,8 +215,8 @@
 </span><span id="GestorBD.crear_esquema-17"><a href="#GestorBD.crear_esquema-17"><span class="linenos">17</span></a>    <span class="k">try</span><span class="p">:</span>
 </span><span id="GestorBD.crear_esquema-18"><a href="#GestorBD.crear_esquema-18"><span class="linenos">18</span></a>      <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">archivo_esquema</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
 </span><span id="GestorBD.crear_esquema-19"><a href="#GestorBD.crear_esquema-19"><span class="linenos">19</span></a>        <span class="n">sql_script</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-</span><span id="GestorBD.crear_esquema-20"><a href="#GestorBD.crear_esquema-20"><span class="linenos">20</span></a>
-</span><span id="GestorBD.crear_esquema-21"><a href="#GestorBD.crear_esquema-21"><span class="linenos">21</span></a>      <span class="n">con</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conectar</span><span class="p">(</span><span class="s1">&#39;administrador&#39;</span><span class="p">,</span> <span class="s1">&#39;admin123&#39;</span><span class="p">)</span>
+</span><span id="GestorBD.crear_esquema-20"><a href="#GestorBD.crear_esquema-20"><span class="linenos">20</span></a>      <span class="c1"># Aquí necesitamos que la conexión sea con el usuario root</span>
+</span><span id="GestorBD.crear_esquema-21"><a href="#GestorBD.crear_esquema-21"><span class="linenos">21</span></a>      <span class="n">con</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conectar</span><span class="p">(</span><span class="n">DB_ROOT</span><span class="p">,</span> <span class="n">DB_ROOT_NAME</span><span class="p">)</span>
 </span><span id="GestorBD.crear_esquema-22"><a href="#GestorBD.crear_esquema-22"><span class="linenos">22</span></a>      <span class="k">if</span> <span class="n">con</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="GestorBD.crear_esquema-23"><a href="#GestorBD.crear_esquema-23"><span class="linenos">23</span></a>        <span class="k">return</span> <span class="kc">False</span>
 </span><span id="GestorBD.crear_esquema-24"><a href="#GestorBD.crear_esquema-24"><span class="linenos">24</span></a>

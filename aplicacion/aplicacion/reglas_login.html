@@ -147,51 +147,7 @@
 </span></pre></div>
 
 
-            <div class="docstring"><h1 id="reglaslogin">ReglasLogin</h1>
-
-<p>La clase <code><a href="#ReglasLogin">ReglasLogin</a></code> pertenece a la <strong>Capa de Aplicación</strong> y se encarga de
-gestionar el proceso de inicio de sesión seguro dentro del sistema.</p>
-
-<p>Su responsabilidad principal es <strong>coordinar la validación de credenciales</strong>
-utilizando la clase <code>Conexion</code> de la capa de Persistencia, sin exponer detalles
-de acceso ni mezclar lógica de interfaz o acceso a la base de datos.</p>
-
-<hr />
-
-<h2 id="objetivos-de-esta-capa-en-el-contexto-del-login">Objetivos de esta capa en el contexto del login</h2>
-
-<ul>
-<li>Controlar el flujo del proceso de autenticación.</li>
-<li>Realizar múltiples intentos de inicio de sesión (máximo 3).</li>
-<li>Evitar que la presentación se conecte directamente a la base de datos.</li>
-<li>Garantizar un manejo seguro de errores de conexión.</li>
-<li>Entregar una conexión válida solo si las credenciales son correctas.</li>
-</ul>
-
-<hr />
-
-<h2 id="flujo-de-funcionamiento">Flujo de funcionamiento</h2>
-
-<ol>
-<li>La capa de <strong>Presentación</strong> solicita las credenciales del usuario (MySQL).</li>
-<li><code><a href="#ReglasLogin">ReglasLogin</a></code> recibe esas credenciales a través de un <em>callback</em>.</li>
-<li>La clase intenta abrir una conexión llamando internamente a <code>Conexion</code>.</li>
-<li>Si la conexión es exitosa, retorna la instancia de conexión.</li>
-<li>Si falla, descuenta un intento y vuelve a solicitar credenciales.</li>
-<li>Si se alcanzan los 3 intentos, el sistema finaliza la ejecución.</li>
-</ol>
-
-<hr />
-
-<h2 id="diseno-en-la-arquitectura-por-capas">Diseño en la arquitectura por capas</h2>
-
-<pre class="mermaid-pre"><div class="mermaid">flowchart LR
-    A["Presentación&lt;br&gt;(petición de usuario)"] --&gt; B["Aplicación&lt;br&gt;ReglasLogin"]
-    B --&gt; C[Persistencia&lt;br&gt;Conexion]
-    C --&gt;|intenta conectar| BD[(MySQL)]
-
-    B --&gt;|"retorna conexión válida"| A
-</div></pre>
+            <div class="docstring"><p></p>
 </div>
 
 
