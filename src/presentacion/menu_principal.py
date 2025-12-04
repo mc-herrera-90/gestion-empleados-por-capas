@@ -1,77 +1,71 @@
-from presentacion.menu import Menu
-
-class MenuPrincipal(Menu):
-
-  def __init__(self):
-    print("1. Ingresar al sistema")
-    print("2. Salir")
-
-    if self.pedir_opcion() == 1:
-      self.iniciar_sesion()
-
-  def mostrar_opciones(self):
-    print("===== ECOTECH SOLUTIONS =====")
-    print("Menú Principal ")
-    print("1. Menú de Departamento")
-    print("2. Menú de Proyectos")
-    print("3. Menú de Empleados")
-    print("4. Salir del programa")
+from pwinput import pwinput
+from presentacion.utilidades import pedir_opcion_segura, mostrar_mensaje_flush
+from presentacion.menu_usuario import MenuUsuario
+from presentacion.menu_servicio import MenuServicio
 
 
-  def pedir_opcion(self):
-    return int(input("Seleccione una opción: "))
+class MenuPrincipal:
 
-  def pedir_credenciales(self):
-    print("===== INICIO DE SESIÓN =====")
-    u = input("Usuario MySQL: ")
-    p = input("Contraseña MySQL: ")
-    return u, p
+    def __init__(self):
+        print("1. Ingresar al sistema")
+        print("2. Salir")
 
-  def iniciar_sesion(self):
+        opcion = pedir_opcion_segura("Seleccione una opción: ", [1, 2])
 
-    from aplicacion.reglas_login import ReglasLogin
-    login = ReglasLogin()
-    conexion = login.iniciar(self.pedir_credenciales)
-    if conexion.open:
-      print("Accediendo al sistema..")
-      self.mostrar_opciones()
+        if opcion == 1:
+            self.iniciar_sesion()
 
-# class MenuPrincipal(Menu):
+        elif opcion == 2:
+            mostrar_mensaje_flush(borde=True)
+            exit()
 
-#   def __init__(self) -> None:
-#     print("Menú Principal ")
-#     print("1. Ingresar al sistema")
-#     print("2. Salir")   
+    def mostrar_opciones(self):
+        while True:
+            print("\n[ MENÚ PRINCIPAL ]")
+            print("1. Menú de Usuarios")
+            print("2. Menú de Departamento")
+            print("3. Menú de Proyectos")
+            print("4. Menú de Empleados")
+            print("5. Menú de Servicios")
+            print("0. Salir del programa")
 
+            opcion = pedir_opcion_segura("Seleccione una opción: ", [1, 2, 3, 4, 5, 0])
 
-#   def mostrar_opciones(self):
-#     print("===== ECOTECH SOLUTIONS =====")
-#     print("Menú Principal ")
-#     print("1. Menú de Departamento")
-#     print("2. Menú de Proyectos")
-#     print("3. Menú de Empleados")
-#     print("4. Salir del programa")
+            if opcion == 1:
+                menu_usuario = MenuUsuario()
+                menu_usuario.mostrar_opciones()
 
-#   def pedir_opcion(self):
-#     return int(input("Seleccione una opción: "))
+            elif opcion == 2:
+                from presentacion.menu_departamento import MenuDepartamento
 
-#   def pedir_credenciales(self):
-#     print("===== INICIO DE SESIÓN =====")
-#     u = input("Usuario MySQL: ")
-#     p = input("Contraseña MySQL: ")
-#     return u, p
+                menu_departamento = MenuDepartamento()
+                menu_departamento.mostrar_opciones()
+            elif opcion == 3:
+                from presentacion.menu_proyecto import MenuProyecto
 
-#   def seleccionar_opcion(self):
-#     opcion = self.pedir_opcion()
+                menu_proyecto = MenuProyecto()
+                menu_proyecto.mostrar_opciones()
+            if opcion == 5:
+                menu_servicio = MenuServicio()
+                menu_servicio.mostrar_opciones()
 
-#     if opcion == 1:
-#       login = ReglasLogin()
-#       conexion = login.iniciar(self.pedir_credenciales)
-#       if conexion.open:
-#         print("Accediendo al sistema")
+            elif opcion == 0:
+                mostrar_mensaje_flush(borde=True)
+                break
+        exit()
 
-#     elif opcion == 2:
-#         print("Saliendo..")
-#         exit()
-#     else:
-#         print("Opción inválida. Por favor, seleccione una opción válida.")
+    def pedir_credenciales(self):
+        print("[ INICIO DE SESIÓN ]")
+        u = input("Usuario Administrador: ")
+        p = pwinput("Contraseña: ", "*")
+        return u, p
+
+    def iniciar_sesion(self):
+
+        from aplicacion.reglas_login import ReglasLogin
+
+        login = ReglasLogin()
+        conexion = login.iniciar(self.pedir_credenciales)
+        if conexion.open:
+            print("Accediendo al sistema..")
+            self.mostrar_opciones()

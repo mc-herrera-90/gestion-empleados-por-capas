@@ -1,15 +1,12 @@
 from typing import Any, Iterable
 
 
-def validar_tipo(valor: object, tipo: type) -> bool:
+def validar_tipo(valor: str, tipo: type) -> tuple[bool, Any]:
     try:
-        tipo(valor)
+        return True, tipo(valor)
     except ValueError:
-        print("Tipo inválido")
-        return False
-    else:
-        return True
+        return False, None
 
 
 def validar_opcion(opcion: Any, opciones: Iterable[Any]) -> bool:
-    return True if opcion in opciones else False
+    return opcion in opciones

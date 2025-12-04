@@ -3,7 +3,7 @@ DROP DATABASE IF EXISTS ecotech_solutions_company;
 CREATE DATABASE ecotech_solutions_company;
 USE ecotech_solutions_company;
 
-CREATE USER IF NOT EXISTS 'administrador'@'localhost' IDENTIFIED BY 'admin123';
+CREATE USER IF NOT EXISTS 'administrador'@'localhost' IDENTIFIED BY 'Admin123!';
 GRANT ALL PRIVILEGES ON ecotech_solutions_company.* TO 'administrador'@`localhost`;
 -- SELECT user, plugin FROM mysql.user;
 -- En caso de que el plugin de autenticación sea sha256_password

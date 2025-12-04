@@ -1,7 +1,8 @@
 from presentacion.menu import Menu
 
+
 class MenuDepartamento(Menu):
-    
+
     def mostrar_opciones(self):
         print("Opciones del Menú de Departamento:")
         print("1. Agregar Departamento")

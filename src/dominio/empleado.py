@@ -1,5 +1,6 @@
 from typing import Optional
 
+
 class Empleado:
     """
     Modelo de dominio para un Empleado.

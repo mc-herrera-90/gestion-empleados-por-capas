@@ -6,68 +6,58 @@ from configuracion.auditoria import logger_bd
 
 
 class Conexion:
-    """
-    Clase base para gestionar la conexión a MySQL y gestionar un Cursor para ejecutar sentencias SQL.
-    """
 
-    def __init__(
-        self,
-        host: str = DB_HOST,
-        database: str = DB_NAME,
-    ) -> None:
+    def __init__(self, host: str = DB_HOST, database: str = DB_NAME) -> None:
         self._host = host
         self._database = database
+        self._conn: Optional[Connection] = None
 
-    def conectar(self, user: str, password: str) -> Optional[Connection]:
+    def _conectar(self, user: str, password: str) -> Optional[Connection]:
         """
-        Intenta una conexión ÚNICA.
-        La capa aplicación decide si reintenta o no.
+        Crea UNA conexión y la guarda en self._conn
         """
-        conn = None
         try:
-            conn = pymysql.connect(
+            self._conn = pymysql.connect(
                 host=self._host, user=user, password=password, database=self._database
             )
             logger_bd.info(
-                f"🔌 Conexión a 🐬 MySQL exitosa :🧑🏻‍💻 {user}@{self._host} -> 💾 {self._database}"
+                f"🔌 Conexión a MySQL exitosa: {user}@{self._host} -> {self._database}"
             )
-            return conn
+            return self._conn
 
         except pymysql.MySQLError as e:
             logger_bd.error(f"😩 Error al conectar: {e}")
-            self.desconectar(conn)
+            self._conn = None
             return None
 
-    def desconectar(self, conexion: Connection) -> bool:
+    def _desconectar(self) -> bool:
         """
-        Cierra la conexión abierta.
+        Cierra la conexión guardada en self._conn
         """
-        if conexion:
+        if self._conn:
             try:
-                conexion.close()
-                logger_bd.info(f"🔒 Conexión cerrada correctamente")
+                self._conn.close()
+                logger_bd.info("🔒 Conexión cerrada correctamente")
+                self._conn = None
                 return True
             except pymysql.MySQLError as e:
                 print(f"[Conexion] Error al cerrar conexión: {e}")
                 return False
         return False
 
-    def ejecutar_query(
-        self,
-        conexion: Connection,
-        query: str,
-        params: Optional[Iterable[Any]] = None,
-    ):
+    def _ejecutar_query(self, query: str, params: Optional[Iterable[Any]] = None):
         """
-        Ejecuta un query (SELECT, INSERT, UPDATE o DELETE).
-        Retorna:
-            - lista de rows para SELECT
-            - cantidad de filas afectadas en otros casos
+        Ejecuta SQL usando la conexión interna self._conn
         """
+        if not self._conn:
+            raise RuntimeError(
+                "No hay conexión activa. Debes llamar _conectar() primero."
+            )
+
         try:
-            with conexion.cursor() as cur:
+            with self._conn.cursor() as cur:
                 cur.execute(query, params)
-                conexion.commit()
+                self._conn.commit()
 
                 if query.strip().lower().startswith("select"):
                     return cur.fetchall()
@@ -75,5 +65,5 @@ class Conexion:
                 return cur.rowcount
 
         except pymysql.MySQLError as e:
-            print(f"[Conexion] Error en ejecutar_query: {e}")
+            logger_bd.error(f"[Conexion] Error en ejecutar_query: {e}")
             return None

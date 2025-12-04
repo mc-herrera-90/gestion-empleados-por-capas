@@ -1,26 +1,28 @@
 from persistencia.conexion import Conexion
 
+
 class ReglasLogin:
-  """
-  .. include:: ../documentacion/aplicacion/reglas_login.md
-  """
-  def __init__(self):
-    self.con = Conexion()
+    """
+    .. include:: ../documentacion/aplicacion/reglas_login.md
+    """
 
-  def iniciar(self, pedir_credenciales_callback):
-    intentos = 3
+    def __init__(self):
+        self.con = Conexion()
 
-    while intentos > 0:
-      usuario, password = pedir_credenciales_callback()
+    def iniciar(self, pedir_credenciales_callback):
+        intentos = 3
 
-      conexion = self.con.conectar(usuario, password)
+        while intentos > 0:
+            usuario, password = pedir_credenciales_callback()
 
-      if conexion:
-        print("Inicio de sesión exitoso.")
-        return conexion
+            conexion = self.con.conectar(usuario, password)
 
-      intentos -= 1
-      print(f"Credenciales incorrectas. Intentos restantes: {intentos}")
+            if conexion:
+                print("Inicio de sesión exitoso.")
+                return conexion
 
-    print("Se agotaron los intentos. Saliendo del sistema.")
-    exit()
+            intentos -= 1
+            print(f"Credenciales incorrectas. Intentos restantes: {intentos}")
+
+        print("Se agotaron los intentos. Saliendo del sistema.")
+        exit()
