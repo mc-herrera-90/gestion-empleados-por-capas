@@ -18,9 +18,9 @@ class Conexion:
         self._database = database
         self._user = user
         self._password = password
-        self._conn: Optional[Connection] = None
+        self._conn: Connection | None = None
 
-    def _conectar(self) -> Optional[Connection]:
+    def _conectar(self) -> Connection | None:
 
         if self._conn and getattr(self._conn, "open", False):
             return self._conn
