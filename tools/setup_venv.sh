@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-VENV_DIR="venv"
+export VENV_DIR="venv"
 
 # Verificar si python3-venv está disponible (aplica por ejemplo en Ubuntu)
 if ! python3 -m venv --help >/dev/null 2>&1; then
