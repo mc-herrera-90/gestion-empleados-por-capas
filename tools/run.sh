@@ -1,6 +1,21 @@
 #!/bin/bash
 set -e
 
+if ! python3 -m venv --help >/dev/null 2>&1; then
+    echo "⚠️  El paquete python3-venv no está instalado."
+    read -p "¿Deseas instalarlo ahora? [y/N]: " RESP
+    if [[ "$RESP" =~ ^[Yy]$ ]]; then
+        echo "Instalando python3-venv..."
+        sudo apt update
+        sudo apt install -y python3-venv
+    else
+        echo "Por favor instala python3-venv manualmente con:"
+        echo "    sudo apt install python3-venv"
+        exit 1
+    fi
+fi
+
+
 HELP=false
 
 # Función de ayuda
