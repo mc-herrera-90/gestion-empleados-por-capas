@@ -51,7 +51,7 @@ if [ "$(uname)" = "Linux" ]; then
             echo ""
             echo "Para solucionarlo, abre la terminal y ejecuta:"
             echo "  sudo mysql"
-            echo "  ALTER USER 'root'@'localhost' IDENTIFIED WITH caching_sha2_password BY 'TuContraseña';"
+            echo "  ALTER USER 'root'@'localhost' IDENTIFIED WITH caching_sha2_password BY 'Root123!';"
             echo "  FLUSH PRIVILEGES;"
             echo "  exit"
             echo ""
