@@ -130,7 +130,7 @@ class GestorInicializacion:
             print(f"[ERROR] No se pudo leer el archivo SQL: {e}")
             return False
 
-        print(f"Archivo SQL: {self.archivo_esquema}\n ✅  cargado correctamente.\n")
+        print(f"Archivo SQL: {self.archivo_esquema}\n✅  cargado correctamente.\n")
 
         con = self._pedir_credenciales_root()
         if con is None:
