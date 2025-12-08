@@ -43,7 +43,7 @@ export PYTHONPATH="$PYTHONPATH:$(pwd)/src"
 # Verificación de método de autenticación root en Linux (Ubuntu/Debian)
 if [ "$(uname)" = "Linux" ]; then
     if command -v mysql >/dev/null 2>&1; then
-        MYSQL_AUTH=$(mysql -u root -e "SELECT plugin FROM mysql.user WHERE user='root';" 2>/dev/null | tail -n1 || echo "")
+        MYSQL_AUTH=$(sudo mysql -u root -e "SELECT plugin FROM mysql.user WHERE user='root';" 2>/dev/null | tail -n1 || echo "")
         if [[ "$MYSQL_AUTH" == "auth_socket" ]]; then
             echo ""
             echo "⚠️  Atención: Tu instalación de MySQL usa auth_socket para el usuario root."
