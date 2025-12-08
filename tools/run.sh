@@ -10,10 +10,9 @@ function mostrar_ayuda() {
     echo ""
     echo "Este script:"
     echo "  1. Configura el entorno virtual (crea venv e instala dependencias)."
-    echo "  2. Activa el entorno virtual."
-    echo "  3. Verifica método de autenticación de MySQL en Linux (Ubuntu/Debian)."
-    echo "  4. Ejecuta la inicialización de la base de datos."
-    echo "  5. Desactiva el entorno virtual."
+    echo "  2. Ejecuta la inicialización de la base de datos."
+    echo "  3. Desactiva el entorno virtual."
+    echo "  4. Pregunta si desea iniciar la aplicación."
 }
 
 # Parsear argumentos
@@ -28,14 +27,11 @@ done
 
 # Ejecutar setup del entorno virtual
 chmod +x ./tools/setup_venv.sh
-./tools/setup_venv.sh
+source ./tools/setup_venv.sh
 
 clear
 echo ""
 echo "SETUP"
-
-# Activar entorno virtual
-source ./venv/bin/activate
 
 # Configurar PYTHONPATH para que Python encuentre src/
 export PYTHONPATH="$PYTHONPATH:$(pwd)/src"
@@ -64,8 +60,21 @@ if [ "$(uname)" = "Linux" ]; then
 fi
 
 # Ejecutar inicialización de la base de datos
-python -m configuracion.init_db
+"$VENV_DIR/bin/python" -m configuracion.init_db
 
 echo ""
-echo "=== Desactivando entorno virtual ==="
-deactivate
+echo "🤟 SETUP COMPLETADO"
+echo ""
+
+# Preguntar al usuario si quiere iniciar la aplicación
+read -p "¿Deseas iniciar la aplicación ahora? [s/N]: " RESP
+if [[ "$RESP" =~ ^[Ss]$ ]]; then
+    echo "🚀 Iniciando aplicación..."
+    "$VENV_DIR/bin/python" src/main.py
+else
+    echo ""
+    echo "Para iniciar la aplicación más tarde, primero activa el entorno virtual:"
+    echo "  source $VENV_DIR/bin/activate"
+    echo "Luego ejecuta el programa con:"
+    echo "  python src/main.py"
+fi
