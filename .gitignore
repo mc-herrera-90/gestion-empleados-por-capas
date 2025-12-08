@@ -1,5 +1,7 @@
 venv/
 docs/
 demo/
-**/*/__pycache__/
+
+**/**/__pycache__/
+**/**/logs/
 .env
