@@ -1,23 +1,6 @@
 #!/bin/bash
 set -e
 
-if ! python3 -m venv --help >/dev/null 2>&1; then
-    echo "⚠️  El paquete python3-venv no está instalado."
-    read -p "¿Deseas instalarlo ahora? [y/N]: " RESP
-    if [[ "$RESP" =~ ^[Yy]$ ]]; then
-        echo "Instalando python3-venv..."
-        sudo apt update
-        sudo apt install -y python3-venv
-    else
-        echo "Por favor instala python3-venv manualmente con:"
-        echo "    sudo apt install python3-venv"
-        exit 1
-    fi
-fi
-
-
-HELP=false
-
 # Función de ayuda
 function mostrar_ayuda() {
     echo "Uso: ./tools/run.sh [opciones]"
@@ -26,7 +9,7 @@ function mostrar_ayuda() {
     echo "  -h, --help     Muestra esta ayuda"
     echo ""
     echo "Este script:"
-    echo "  1. Configura el entorno virtual (instala dependencias)."
+    echo "  1. Configura el entorno virtual (crea venv e instala dependencias)."
     echo "  2. Activa el entorno virtual."
     echo "  3. Ejecuta la inicialización de la base de datos."
     echo "  4. Desactiva el entorno virtual."
@@ -42,17 +25,21 @@ for arg in "$@"; do
     esac
 done
 
+# Ejecutar setup del entorno virtual
 chmod +x ./tools/setup_venv.sh
 ./tools/setup_venv.sh
 
 clear
 echo ""
 echo "SETUP"
+
+# Activar entorno virtual
 source ./venv/bin/activate
 
 # Configurar PYTHONPATH para que Python encuentre src/
 export PYTHONPATH="$PYTHONPATH:$(pwd)/src"
 
+# Ejecutar inicialización de la base de datos
 python -m configuracion.init_db
 
 echo ""
