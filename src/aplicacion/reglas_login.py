@@ -2,12 +2,9 @@ from persistencia.conexion import Conexion
 
 
 class ReglasLogin:
-    """
-    .. include:: ../documentacion/aplicacion/reglas_login.md
-    """
 
-    def __init__(self):
-        self.con = Conexion()
+    def __init__(self) -> None:
+        pass
 
     def iniciar(self, pedir_credenciales_callback):
         intentos = 3
@@ -15,10 +12,10 @@ class ReglasLogin:
         while intentos > 0:
             usuario, password = pedir_credenciales_callback()
 
-            conexion = self.con.conectar(usuario, password)
+            conexion = Conexion(user=usuario, password=password)
 
-            if conexion:
-                print("Inicio de sesión exitoso.")
+            if conexion.abrir():
+                print("\nInicio de sesión exitoso.")
                 return conexion
 
             intentos -= 1
