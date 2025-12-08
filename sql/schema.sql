@@ -1,16 +1,39 @@
+/* ============================================================
+   Proyecto: Ecotech Solutions Company
+   Script:  schema.sql
+   Función: Inicialización completa de la base de datos
+
+   Este archivo crea:
+   - La base de datos principal
+   - El usuario administrador con permisos limitados al proyecto
+   - Todas las tablas necesarias para el sistema de gestión
+   - Llaves primarias, foráneas, índices y restricciones
+   - Configuración estándar de timestamps y charset
+
+   Requisitos del servidor:
+   - MySQL 8.0 o superior
+   - Motor de almacenamiento: InnoDB
+   - Intercalación recomendada: utf8mb4_unicode_ci
+   - Juego de caracteres: UTF8MB4 (soporta emojis y multilenguaje)
+
+   Nota:
+   Este script está diseñado para ejecutarse como usuario root
+   mediante la herramienta init_db incluida en el proyecto.
+   Modifica usuarios/contraseñas según sea necesario.
+   ============================================================ */
+
 DROP DATABASE IF EXISTS ecotech_solutions_company;
 
 CREATE DATABASE ecotech_solutions_company;
 USE ecotech_solutions_company;
 
-CREATE USER IF NOT EXISTS 'administrador'@'localhost' IDENTIFIED BY 'Admin123!';
-GRANT ALL PRIVILEGES ON ecotech_solutions_company.* TO 'administrador'@`localhost`;
+CREATE USER IF NOT EXISTS 'ecotech_admin'@'localhost' IDENTIFIED BY 'Admin123!';
+GRANT ALL PRIVILEGES ON ecotech_solutions_company.* TO 'ecotech_admin'@'localhost';
 -- SELECT user, plugin FROM mysql.user;
 -- En caso de que el plugin de autenticación sea sha256_password
--- ALTER USER 'usuario_sha256'@'localhost' IDENTIFIED WITH mysql_native_password BY 'admin123';
--- FLUSH PRIVILEGES;
+-- ALTER USER 'ecotech_admin'@'localhost' IDENTIFIED WITH mysql_native_password BY 'admin123';
+FLUSH PRIVILEGES;
 
--- Requisitos del servidor: MySQL 8+, InnoDB, utf8mb4
 
 -- -------------------------------------------------------
 -- Tabla: usuarios
