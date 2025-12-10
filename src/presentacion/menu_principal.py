@@ -1,12 +1,15 @@
-from pwinput import pwinput
 from presentacion.utilidades import pedir_opcion_segura, mostrar_mensaje_flush
-from presentacion.menu_usuario import MenuUsuario
-from presentacion.menu_servicio import MenuServicio
+from aplicacion.reglas_login import ReglasLogin
+from persistencia.dao.departamento_dao import DepartamentoDAO
+from aplicacion.reglas_departamento import ReglasDepartamento
+from presentacion.menu_departamento import MenuDepartamento
+from pwinput import pwinput
 
 
 class MenuPrincipal:
 
     def __init__(self):
+
         print("1. Ingresar al sistema")
         print("2. Salir")
 
@@ -14,10 +17,21 @@ class MenuPrincipal:
 
         if opcion == 1:
             self.iniciar_sesion()
-
-        elif opcion == 2:
+        else:
             mostrar_mensaje_flush(borde=True)
             exit()
+
+    def pedir_credenciales(self):
+        print("[ INICIO DE SESIÓN ]")
+        u = input("Usuario Administrador de Ecotech: ")
+        p = pwinput("Contraseña: ", "*")
+        return u, p
+
+    def iniciar_sesion(self):
+        login = ReglasLogin()
+        self.conexion = login.iniciar(self.pedir_credenciales)
+        print("Accediendo al sistema...")
+        self.mostrar_opciones()
 
     def mostrar_opciones(self):
         while True:
@@ -31,41 +45,14 @@ class MenuPrincipal:
 
             opcion = pedir_opcion_segura("Seleccione una opción: ", [1, 2, 3, 4, 5, 0])
 
-            if opcion == 1:
-                menu_usuario = MenuUsuario()
-                menu_usuario.mostrar_opciones()
-
-            elif opcion == 2:
-                from presentacion.menu_departamento import MenuDepartamento
-
-                menu_departamento = MenuDepartamento()
-                menu_departamento.mostrar_opciones()
-            elif opcion == 3:
-                from presentacion.menu_proyecto import MenuProyecto
-
-                menu_proyecto = MenuProyecto()
-                menu_proyecto.mostrar_opciones()
-            if opcion == 5:
-                menu_servicio = MenuServicio()
-                menu_servicio.mostrar_opciones()
+            if opcion == 2:
+                dao = DepartamentoDAO(self.conexion)
+                reglas = ReglasDepartamento(dao)
+                menu = MenuDepartamento(reglas)
+                menu.mostrar_opciones()
 
             elif opcion == 0:
                 mostrar_mensaje_flush(borde=True)
                 break
+
         exit()
-
-    def pedir_credenciales(self):
-        print("[ INICIO DE SESIÓN ]")
-        u = input("Usuario Administrador: ")
-        p = pwinput("Contraseña: ", "*")
-        return u, p
-
-    def iniciar_sesion(self):
-
-        from aplicacion.reglas_login import ReglasLogin
-
-        login = ReglasLogin()
-        conexion = login.iniciar(self.pedir_credenciales)
-        if conexion.open:
-            print("Accediendo al sistema..")
-            self.mostrar_opciones()
