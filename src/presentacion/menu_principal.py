@@ -1,8 +1,12 @@
+from aplicacion.reglas_empleado import ReglasEmpleado
+from persistencia.dao.proyecto_dao import ProyectoDAO
 from presentacion.utilidades import pedir_opcion_segura, mostrar_mensaje_flush
 from aplicacion.reglas_login import ReglasLogin
 from persistencia.dao.departamento_dao import DepartamentoDAO
+from persistencia.dao.empleado_dao import EmpleadoDAO
 from aplicacion.reglas_departamento import ReglasDepartamento
 from presentacion.menu_departamento import MenuDepartamento
+from presentacion.menu_empleado import MenuEmpleado
 from pwinput import pwinput
 
 
@@ -51,6 +55,13 @@ class MenuPrincipal:
                 menu = MenuDepartamento(reglas)
                 menu.mostrar_opciones()
 
+            elif opcion == 4:
+                empleado_dao = EmpleadoDAO(self.conexion)
+                departamento_dao = DepartamentoDAO(self.conexion)
+                proyecto_dao = ProyectoDAO(self.conexion)
+                reglas = ReglasEmpleado(empleado_dao, departamento_dao, proyecto_dao)
+                menu = MenuEmpleado()
+                menu.mostrar_opciones()
             elif opcion == 0:
                 mostrar_mensaje_flush(borde=True)
                 break

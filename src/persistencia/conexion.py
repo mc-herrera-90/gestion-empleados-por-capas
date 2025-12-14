@@ -31,6 +31,7 @@ class Conexion:
                 user=self._user,
                 password=self._password,
                 database=self._database,
+                cursorclass=pymysql.cursors.DictCursor,
             )
             logger_bd.info(
                 f"🔌 Conexión a 🐬 MySQL exitosa: {self._user}@{self._host} -> {self._database}"
@@ -62,7 +63,7 @@ class Conexion:
                 "❌ No se pudo establecer conexión con la BD antes de ejecutar query."
             )
             raise RuntimeError(
-                "No hay conexión activa. Debes llamar _conectar() primero."
+                "No hay conexión activa. Debes abrir una conexión primero."
             )
 
         try:

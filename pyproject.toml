@@ -5,12 +5,12 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "gestion-empleados-por-capas"
 version = "0.1.0"
-description = "Sistema de gestión de empleados con arquitectura por capas."
+description = "Aplicación de consola para gestión de empleados (arquitectura por capas) ecotech solutions"
+authors = [{name = "Marco Contreras", email = "contacto@mcherrera.dev"}]
 readme = "readme.md"
-requires-python = ">=3.10"
+requires-python = ">=3.9"
 license = "MIT"
 
-# Dependencias del proyecto:
 dependencies = [
 	"PyMySQL==1.1.2",
 	"requests==2.32.5",
@@ -22,4 +22,9 @@ docs = ["pdoc>=12.0"]
 
 
 [tool.setuptools.packages.find]
+where = ["src"]
 include = ["aplicacion", "persistencia"]
+
+[project.scripts]
+init-db = "configuracion.init_db:inicializar_db"
+
