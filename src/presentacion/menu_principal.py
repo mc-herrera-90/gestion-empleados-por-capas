@@ -72,7 +72,7 @@ class MenuPrincipal:
                 departamento_dao = DepartamentoDAO(self.conexion)
                 proyecto_dao = ProyectoDAO(self.conexion)
                 reglas = ReglasEmpleado(empleado_dao, departamento_dao, proyecto_dao)
-                menu = MenuEmpleado()
+                menu = MenuEmpleado(reglas)
                 menu.mostrar_opciones()
 
             elif opcion == 5:
