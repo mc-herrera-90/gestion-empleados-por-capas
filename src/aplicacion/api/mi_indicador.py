@@ -4,7 +4,7 @@ warnings.filterwarnings("ignore", message="urllib3 v2 only supports OpenSSL")
 
 from requests import Session
 from requests.exceptions import RequestException, Timeout, HTTPError
-
+from configuracion.auditoria import logger_api
 
 API_URL = "https://mindicador.cl/api/"
 TIMEOUT_SECONDS = 5
@@ -31,15 +31,17 @@ def obtener_indicador(indicador: str = ""):
         if not isinstance(data, dict):
             raise ValueError("La API no retornó un JSON válido.")
 
+        logger_api.info(f"Indicador '{indicador} obtenido correctamente")
         return data
 
     except Timeout:
-        print("❌ Error: La solicitud a Mindicador.cl excedió el tiempo de espera.")
+        logger_api.error(f"❌ Error: Timeout al consultar Mindicador.cl | URL: {url}")
     except HTTPError as e:
-        print(f"❌ Error HTTP: {e}")
+        logger_api.error(
+            f"❌ Error: HTTP al consultar Mindicador.cl | URL: {url} | {e}"
+        )
     except ValueError as e:
-        print(f"❌ Error interpretando JSON: {e}")
+        logger_api.error(f"❌ Error interpretando JSON: {e}")
     except RequestException as e:
-        print(f"❌ Error de conexión: {e}")
-
+        logger_api.error(f"❌ Error de conexión: {e}")
     return None

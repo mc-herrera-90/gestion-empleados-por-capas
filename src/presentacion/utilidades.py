@@ -1,5 +1,6 @@
 from presentacion.validaciones import validar_tipo, validar_opcion
 import time
+from datetime import datetime
 
 
 def pedir_opcion_segura(mensaje: str, opciones_validas: list[int]) -> int:
@@ -51,3 +52,31 @@ def graficar_ascii(titulo: str, serie: list[dict]) -> None:
         valor = punto["valor"]
         largo = int((valor / max_valor) * 50)
         print(f"{fecha} | " + "#" * largo + f" {valor}%")
+
+
+from datetime import datetime
+
+
+def mostrar_indicador_diario(indicador: dict) -> None:
+    """
+    Muestra un indicador diario con formato tabular.
+    Espera un diccionario con las claves:
+    codigo, nombre, unidad_medida, fecha, valor
+    """
+
+    fecha_raw = indicador.get("fecha", "")
+    try:
+        fecha = datetime.fromisoformat(fecha_raw.replace("Z", "")).strftime("%d-%m-%Y")
+    except ValueError:
+        fecha = fecha_raw
+
+    print("\n" + "=" * 45)
+    print("   INDICADOR ECONÓMICO DIARIO")
+    print("=" * 45)
+    print(f"Código        : {indicador.get('codigo')}")
+    print(f"Nombre        : {indicador.get('nombre')}")
+    print(f"Fecha         : {fecha}")
+    print(
+        f"Valor         : {indicador.get('valor'):.2f} {indicador.get('unidad_medida')}"
+    )
+    print("=" * 45)

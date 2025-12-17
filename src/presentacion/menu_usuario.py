@@ -5,12 +5,30 @@ from dominio.excepciones import (
     EntradaInvalidaError,
 )
 from presentacion.utilidades import pedir_opcion_segura
+from pwinput import pwinput
+from persistencia.dao.usuario_dao import UsuarioDAO
+from presentacion.menu_servicio import MenuServicio
 
 
 class MenuUsuario:
 
-    def __init__(self):
-        self.service = ReglasUsuario()
+    def __init__(self, reglas_usuario: ReglasUsuario):
+        """
+        La capa de presentación recibe el servicio ya configurado.
+        """
+        self.service = reglas_usuario
+
+    def pedir_credenciales_usuario(self):
+        print("[ INICIO DE SESIÓN USUARIO ]")
+        u = input("Usuario: ")
+        p = pwinput("Contraseña: ", "*")
+        return u, p
+
+    def iniciar_sesion_usuario(self):
+        usuario, password = self.pedir_credenciales_usuario()
+        self.service.login(usuario, password)
+        print(f"\nBienvenido")
+        MenuServicio().mostrar_opciones()
 
     def mostrar_opciones(self):
         while True:
@@ -20,9 +38,12 @@ class MenuUsuario:
             print("3. Cambiar contraseña")
             print("4. Eliminar usuario")
             print("5. Listar usuarios")
+            print("6. Iniciar sesión como usuario")
             print("0. Volver a menú principal")
 
-            opcion = pedir_opcion_segura("Seleccione una opción: ", [1, 2, 3, 4, 5, 0])
+            opcion = pedir_opcion_segura(
+                "Seleccione una opción: ", [1, 2, 3, 4, 5, 6, 0]
+            )
 
             try:
                 if opcion == 1:
@@ -60,11 +81,10 @@ class MenuUsuario:
                         print("No hay usuarios registrados.")
 
                 elif opcion == 6:
-                    print("Saliendo del menú de usuarios...")
-                    break
+                    self.iniciar_sesion_usuario()
 
-                else:
-                    print("Opción inválida. Intente nuevamente.")
+                elif opcion == 0:
+                    break
 
             except (
                 UsuarioNoEncontradoError,

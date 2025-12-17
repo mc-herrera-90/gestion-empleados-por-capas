@@ -3,7 +3,7 @@ from typing import Optional
 
 class Usuario:
     """
-    Modelo de dominio para un Usuario del sistema.
+    Modelo de dominio para un Usuario.
     """
 
     def __init__(

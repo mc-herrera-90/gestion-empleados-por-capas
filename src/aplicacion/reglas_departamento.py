@@ -1,4 +1,4 @@
-from persistencia.departamento_dao import DepartamentoDAO
+from persistencia.dao.departamento_dao import DepartamentoDAO
 from dominio.departamento import Departamento
 from typing import List, Optional
 
